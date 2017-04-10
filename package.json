@@ -1,0 +1,24 @@
+{
+  "name": "dt-table",
+  "version": "1.0.0",
+  "description": "coding challenge",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ekakerman/dt-table.git"
+  },
+  "author": "EK Akerman",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ekakerman/dt-table/issues"
+  },
+  "homepage": "https://github.com/ekakerman/dt-table#readme",
+  "dependencies": {
+    "express": "^4.15.2",
+    "morgan": "^1.8.1"
+  }
+}

@@ -19,6 +19,7 @@
   "homepage": "https://github.com/ekakerman/dt-table#readme",
   "dependencies": {
     "express": "^4.15.2",
-    "morgan": "^1.8.1"
+    "morgan": "^1.8.1",
+    "nodemon": "^1.11.0"
   }
 }

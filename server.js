@@ -1,5 +1,9 @@
 var express = require('express');
+var path = require('path');
 var app = express();
+
+app.use(express.static('client'));
+
 var port = process.env.PORT || 8081;
 
 if (!process.env.PORT) {
@@ -7,8 +11,6 @@ if (!process.env.PORT) {
   app.use(morgan('dev'));
 }
 
-app.use(express.static(__dirname));
-
 app.listen(port, function() {
-  console.log('Listening on ' + port);
+  console.log('NodeJS server istening on port ' + port);
 });

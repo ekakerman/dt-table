@@ -2,17 +2,39 @@ angular.module('app.table', [])
 
   .controller('tableCtrl', ['$scope', 'uiGridValidateService', '$window', function($scope, uiGridValidateService, $window){
 
-    //don't allow n/a updates on existing species
+    //don't allow <= 0 DBH on existing species
+    var checkDBH = function(oldValue, newValue, rowEntity) {
+      if (newValue <= 0) {
+        if (rowEntity.Species.toUpperCase() !== 'VACANT' && rowEntity.Species.toUpperCase() !== 'VACANT PLANTING SITE' && rowEntity.Species !== '' && rowEntity.Species !== undefined) {
+          $window.alert('Unable to update table: \nDBH must be greater than 0 for existing trees.');
+          rowEntity.DBH = oldValue;
+          return false;
+        }
+      }
+      return true;
+    }
+
+  //don't allow n/a conditions on existing species
     var checkCondition = function(oldValue, newValue, rowEntity) {
       if (newValue.toUpperCase() === 'N/A') {
-        if (rowEntity.Species.toUpperCase() !== 'VACANT' && rowEntity.Species.toUpperCase() !== 'VACANT PLANTING SITE' && rowEntity.Species !== '') {
+        if (rowEntity.Species.toUpperCase() !== 'VACANT' && rowEntity.Species.toUpperCase() !== 'VACANT PLANTING SITE' && rowEntity.Species !== ''  && rowEntity.Species !== undefined) {
           $window.alert('Unable to update table: \n"N/A" is not a valid condition for existing trees.');
           rowEntity.Condition = oldValue;
           return false;
         }
       }
       return true;
-    }
+    };
+
+    uiGridValidateService.setValidator('updateDBH',
+      function(argument) {
+        return function(oldValue, newValue, rowEntity, colDef) {
+          // console.log(oldValue, newValue, rowEntity, colDef);
+          return (newValue || newValue === 0) ? checkDBH(oldValue, newValue, rowEntity) : true;
+        };
+      },
+      function() { return true; }
+    );
 
     uiGridValidateService.setValidator('updateCondition',
       function(argument) {
@@ -21,11 +43,9 @@ angular.module('app.table', [])
           return !newValue ? true : checkCondition(oldValue, newValue, rowEntity);
         };
       },
-      function() {
-        $scope.msg = 'If the tree species exists, please designate a valid condition';
-        return true;
-      }
+      function() { return true; }
     );
+
 
     $scope.treeTable = {
 
@@ -36,7 +56,8 @@ angular.module('app.table', [])
         { name: 'Side' },
         { name: 'Site' },
         { name: 'Species' },
-        { name: 'DBH' },
+        { name: 'DBH',
+          validators: {required: true, updateDBH: ''}, cellTemplate: 'ui-grid/cellTitleValidator' },
         { name: 'Condition',
           validators: {required: true, updateCondition: ''}, cellTemplate: 'ui-grid/cellTitleValidator' }
       ],

@@ -1,7 +1,8 @@
 angular.module('app.table', [])
-  .controller('tableCtrl', function($scope) {
 
-    $scope.data = [
+  .controller('tableCtrl', ['$scope', function($scope){
+
+    $scope.treeData = [
       {
         ID: 1,
         Address: '3728',
@@ -74,4 +75,4 @@ angular.module('app.table', [])
       }
     ];
 
-  });
+  }]);

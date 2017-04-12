@@ -204,4 +204,28 @@ angular.module('app.table', [])
       gridApi.validate.on.validationFailed($scope, function() {});
     };
 
+    var findDuplicates = function(data) {
+      var unique = data.reduce(function(prev, next, index, arr) {
+        var combo = next.Address + next.Street + next.Side + next.Site;
+        if (prev[combo]) {
+          prev[combo].ids.push(next.ID);
+        } else {
+          prev[combo] = {
+            ids: [next.ID]
+          }
+        }
+        return prev;
+      }, {});
+
+      return Object.keys(unique).reduce(function(prev, next, index, arr) {
+        if (unique[next].ids.length > 1) {
+          prev = prev.concat(unique[next].ids);
+        }
+        return prev;
+      }, []);
+    }
+
+    var duplicates = findDuplicates($scope.treeTable.data);
+    console.log(duplicates);
+
   }]);

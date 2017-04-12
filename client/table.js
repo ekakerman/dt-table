@@ -1,6 +1,31 @@
 angular.module('app.table', [])
 
-  .controller('tableCtrl', ['$scope', function($scope){
+  .controller('tableCtrl', ['$scope', 'uiGridValidateService', '$window', function($scope, uiGridValidateService, $window){
+
+    //don't allow n/a updates on existing species
+    var checkCondition = function(oldValue, newValue, rowEntity) {
+      if (newValue.toUpperCase() === 'N/A') {
+        if (rowEntity.Species.toUpperCase() !== 'VACANT' && rowEntity.Species.toUpperCase() !== 'VACANT PLANTING SITE' && rowEntity.Species !== '') {
+          $window.alert('Unable to update table: \n"N/A" is not a valid condition for existing trees.');
+          rowEntity.Condition = oldValue;
+          return false;
+        }
+      }
+      return true;
+    }
+
+    uiGridValidateService.setValidator('updateCondition',
+      function(argument) {
+        return function(oldValue, newValue, rowEntity, colDef) {
+          // console.log(oldValue, newV alue, rowEntity, colDef);
+          return !newValue ? true : checkCondition(oldValue, newValue, rowEntity);
+        };
+      },
+      function() {
+        $scope.msg = 'If the tree species exists, please designate a valid condition';
+        return true;
+      }
+    );
 
     $scope.treeTable = {
 
@@ -12,7 +37,8 @@ angular.module('app.table', [])
         { name: 'Site' },
         { name: 'Species' },
         { name: 'DBH' },
-        { name: 'Condition' }
+        { name: 'Condition',
+          validators: {required: true, updateCondition: ''}, cellTemplate: 'ui-grid/cellTitleValidator' }
       ],
 
       enableCellEditOnFocus: true,
@@ -109,5 +135,10 @@ angular.module('app.table', [])
         Condition: 'Dead'
       }
     ];
+
+    $scope.treeTable.onRegisterApi = function(gridApi){
+      $scope.gridApi = gridApi;
+      gridApi.validate.on.validationFailed($scope, function() {});
+    };
 
   }]);

@@ -2,10 +2,41 @@ angular.module('app.table', [])
 
   .controller('tableCtrl', ['$scope', 'uiGridValidateService', '$window', function($scope, uiGridValidateService, $window){
 
-    //don't allow <= 0 DBH on existing species
+    var checkVacancy = function(status) {
+      var nonSpecies = ['VACANT', 'VACANT PLANTING SITE', ''];
+      if (status === undefined || nonSpecies.includes(status.toUpperCase())) {
+        return true;
+      }
+      return false;
+    };
+
+    //update DBH and condition when updating species
+    var checkSpecies = function(oldValue, newValue, rowEntity) {
+      //previous vacancy now a species
+      if (checkVacancy(oldValue) && !checkVacancy(newValue)) {
+        if (rowEntity.DBH <= 0) {
+          $window.alert('Please update DBH to a number greater than 0.');
+          rowEntity.DBH = 'TBD';
+        }
+        if (rowEntity.Condition.toUpperCase() === 'N/A') {
+          $window.alert('Please update current condition.');
+          rowEntity.Condition = 'TBD';
+        }
+        return false;
+      }
+      //previous species now a vacancy
+      if (!checkVacancy(oldValue) && checkVacancy(newValue)) {
+        rowEntity.DBH = 0;
+        rowEntity.Condition = 'N/A';
+        return false;
+      }
+      return true;
+    };
+
+    //require positive DBH on existing species
     var checkDBH = function(oldValue, newValue, rowEntity) {
       if (newValue <= 0) {
-        if (rowEntity.Species.toUpperCase() !== 'VACANT' && rowEntity.Species.toUpperCase() !== 'VACANT PLANTING SITE' && rowEntity.Species !== '' && rowEntity.Species !== undefined) {
+        if (!checkVacancy(rowEntity.Species)) {
           $window.alert('Unable to update table: \nDBH must be greater than 0 for existing trees.');
           rowEntity.DBH = oldValue;
           return false;
@@ -14,10 +45,10 @@ angular.module('app.table', [])
       return true;
     }
 
-  //don't allow n/a conditions on existing species
+  //require non-n/a condition on existing species
     var checkCondition = function(oldValue, newValue, rowEntity) {
       if (newValue.toUpperCase() === 'N/A') {
-        if (rowEntity.Species.toUpperCase() !== 'VACANT' && rowEntity.Species.toUpperCase() !== 'VACANT PLANTING SITE' && rowEntity.Species !== ''  && rowEntity.Species !== undefined) {
+        if (!checkVacancy(rowEntity.Species)) {
           $window.alert('Unable to update table: \n"N/A" is not a valid condition for existing trees.');
           rowEntity.Condition = oldValue;
           return false;
@@ -25,6 +56,16 @@ angular.module('app.table', [])
       }
       return true;
     };
+
+    uiGridValidateService.setValidator('updateSpecies',
+      function(argument) {
+        return function(oldValue, newValue, rowEntity, colDef) {
+          // console.log(oldValue, newV alue, rowEntity, colDef);
+          return !newValue ? true : checkSpecies(oldValue, newValue, rowEntity);
+        };
+      },
+      function() { return true; }
+    );
 
     uiGridValidateService.setValidator('updateDBH',
       function(argument) {
@@ -55,7 +96,8 @@ angular.module('app.table', [])
         { name: 'Street' },
         { name: 'Side' },
         { name: 'Site' },
-        { name: 'Species' },
+        { name: 'Species',
+          validators: {required: true, updateSpecies: ''}, cellTemplate: 'ui-grid/cellTitleValidator' },
         { name: 'DBH',
           validators: {required: true, updateDBH: ''}, cellTemplate: 'ui-grid/cellTitleValidator' },
         { name: 'Condition',

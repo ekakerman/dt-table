@@ -2,7 +2,21 @@ angular.module('app.table', [])
 
   .controller('tableCtrl', ['$scope', function($scope){
 
-    $scope.treeData = [
+    $scope.treeTable = {
+      enableCellEditOnFocus: true,
+      columnDefs: [
+        { name: 'ID' },
+        { name: 'Address' },
+        { name: 'Street' },
+        { name: 'Side' },
+        { name: 'Site' },
+        { name: 'Species' },
+        { name: 'DBH' },
+        { name: 'Condition' }
+      ]
+    };
+
+    $scope.treeTable.data = [
       {
         ID: 1,
         Address: '3728',

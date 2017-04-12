@@ -133,28 +133,16 @@ angular.module('app.table', [])
       gridApi.validate.on.validationFailed($scope, function() {});
     };
 
-    var findDuplicates = function(data) {
-      var unique = data.reduce(function(prev, next, index, arr) {
-        var combo = next.Address + next.Street + next.Side + next.Site;
-        if (prev[combo]) {
-          prev[combo].ids.push(next.ID);
-        } else {
-          prev[combo] = {
-            ids: [next.ID]
-          }
-        }
-        return prev;
-      }, {});
-
-      return Object.keys(unique).reduce(function(prev, next, index, arr) {
-        if (unique[next].ids.length > 1) {
-          prev = prev.concat(unique[next].ids);
-        }
-        return prev;
-      }, []);
+    $scope.showDuplicates = function() {
+      $scope.treeTable.data = Factory.findDuplicates();
+      $scope.duplicates = true;
     }
 
-    var duplicates = findDuplicates($scope.treeTable.data);
-    console.log(duplicates);
+    $scope.showAll = function() {
+      $scope.treeTable.data = Factory.getData();
+      $scope.duplicates = false;
+    }
+
+    $scope.duplicates = false;
 
   }]);

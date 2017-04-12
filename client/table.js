@@ -1,6 +1,6 @@
 angular.module('app.table', [])
 
-  .controller('tableCtrl', ['$scope', 'uiGridValidateService', '$window', 'Factory', function($scope, uiGridValidateService, $window, Factory){
+  .controller('tableCtrl', ['$scope', 'uiGridValidateService', 'uiGridConstants', '$window', 'Factory', function($scope, uiGridValidateService, uiGridConstants, $window, Factory){
 
     var checkVacancy = function(status) {
       var nonSpecies = ['VACANT', 'VACANT PLANTING SITE', ''];
@@ -87,6 +87,13 @@ angular.module('app.table', [])
       function() { return true; }
     );
 
+    var paginationOptions = {
+        pageNumber: 1,
+        pageSize: 25,
+        sort: null
+      };
+
+
 
     $scope.treeTable = {
 
@@ -103,6 +110,9 @@ angular.module('app.table', [])
         { name: 'Condition',
           validators: {required: true, updateCondition: ''}, cellTemplate: 'ui-grid/cellTitleValidator' }
       ],
+
+      paginationPageSizes: [5, 10, 20],
+      paginationPageSize: 5,
 
       enableCellEditOnFocus: true,
       enableGridMenu: true,

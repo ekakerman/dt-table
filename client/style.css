@@ -1,8 +1,64 @@
-.myGrid {
-    width: 80%;
-    height: 250px;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+/* general reset */
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+  display: block;
+}
+
+html {
+  background: url(https://images.alphacoders.com/442/442557.jpg) no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  font-family: sans-serif;
+}
+
+h1 {
+  color: black;
+  text-align: center;
+  font-size: 2.2em;
+  padding-top: 1em;
+  padding-bottom: .5em;
+}
+
+p {
+  color: black;
+  text-align: center;
+  padding-top: 1em;
+}
+
+body {
+  height: 100vh;
+  background-image: url('https://upload.wikimedia.org/wikipedia/commons/d/d2/Solid_white.png');
+  background-repeat: repeat-y;
+  background-size: 80vw auto;
+  background-position: center center;
+}
+
+.treeTable {
+  width: 75vw;
+  height: 255px;
+  margin: 0 auto;
 }

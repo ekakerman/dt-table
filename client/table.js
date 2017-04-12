@@ -134,6 +134,7 @@ angular.module('app.table', [])
     };
 
     $scope.showDuplicates = function() {
+      Factory.setData($scope.treeTable.data);
       $scope.treeTable.data = Factory.findDuplicates();
       $scope.duplicates = true;
     }

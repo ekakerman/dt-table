@@ -79,6 +79,10 @@ angular.module('app.factory', [])
       return data;
     }
 
+    var setData = function(data) {
+      data = data;
+    }
+
     var findDuplicates = function() {
       var unique = data.reduce(function(prev, next, index, arr) {
         var combo = next.Address + next.Street + next.Side + next.Site;
@@ -102,6 +106,7 @@ angular.module('app.factory', [])
 
   return {
     getData: getData,
+    setData: setData,
     findDuplicates: findDuplicates
   };
 

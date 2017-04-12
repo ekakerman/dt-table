@@ -98,18 +98,20 @@ angular.module('app.table', [])
     $scope.treeTable = {
 
       columnDefs: [
-        { name: 'ID' },
+        { name: 'ID', width: '5%'},
         { name: 'Address' },
-        { name: 'Street' },
+        { name: 'Street', width: '15%'},
         { name: 'Side' },
-        { name: 'Site' },
-        { name: 'Species',
+        { name: 'Site', widteh: '10%'},
+        { name: 'Species', width: '20%',
           validators: {required: true, updateSpecies: ''}, cellTemplate: 'ui-grid/cellTitleValidator' },
         { name: 'DBH',
           validators: {required: true, updateDBH: ''}, cellTemplate: 'ui-grid/cellTitleValidator' },
         { name: 'Condition',
           validators: {required: true, updateCondition: ''}, cellTemplate: 'ui-grid/cellTitleValidator' }
       ],
+
+      enableFiltering: true,
 
       paginationPageSizes: [5, 10, 20],
       paginationPageSize: 5,

@@ -1,4 +1,4 @@
-angular.module('app', ['app.table', 'ngRoute', 'ngAnimate', 'ngTouch', 'ui.grid', 'ui.grid.edit', 'ui.grid.cellNav', 'ui.grid.selection', 'ui.grid.exporter', 'ui.grid.validate'])
+angular.module('app', ['app.table', 'app.factory', 'ngRoute', 'ngAnimate', 'ngTouch', 'ui.grid', 'ui.grid.edit', 'ui.grid.cellNav', 'ui.grid.selection', 'ui.grid.exporter', 'ui.grid.validate'])
   .config(function($routeProvider) {
     $routeProvider
       .when('/', {

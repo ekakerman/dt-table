@@ -57,6 +57,13 @@ body {
   background-position: center center;
 }
 
+button {
+  color: white;
+  background-color: green;
+  display: block;
+  margin:1em auto;
+}
+
 .treeTable {
   width: 75vw;
   height: 255px;

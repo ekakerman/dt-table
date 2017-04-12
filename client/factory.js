@@ -79,8 +79,30 @@ angular.module('app.factory', [])
       return data;
     }
 
+    var findDuplicates = function() {
+      var unique = data.reduce(function(prev, next, index, arr) {
+        var combo = next.Address + next.Street + next.Side + next.Site;
+        if (prev[combo]) {
+          prev[combo].ids.push(next);
+        } else {
+          prev[combo] = {
+            ids: [next]
+          }
+        }
+        return prev;
+      }, {});
+
+      return Object.keys(unique).reduce(function(prev, next, index, arr) {
+        if (unique[next].ids.length > 1) {
+          prev = prev.concat(unique[next].ids);
+        }
+        return prev;
+      }, []);
+    };
+
   return {
-    getData: getData
+    getData: getData,
+    findDuplicates: findDuplicates
   };
 
 });
